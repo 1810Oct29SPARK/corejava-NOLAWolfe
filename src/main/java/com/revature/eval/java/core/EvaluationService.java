@@ -31,7 +31,17 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		phrase = phrase.toUpperCase();
+		String[] words = phrase.split("-|\\s");
+		String acr = "";
+		
+		
+		for (String w : words) {
+			
+			acr = acr + w.charAt(0);
+		}
+		
+		return acr;
 	}
 
 	/**
@@ -43,6 +53,8 @@ public class EvaluationService {
 	 * different lengths.
 	 *
 	 */
+	
+	//@75 GOOD
 	static class Triangle {
 		private double sideOne;
 		private double sideTwo;
@@ -85,17 +97,31 @@ public class EvaluationService {
 
 		public boolean isEquilateral() {
 			// TODO Write an implementation for this method declaration
-			return false;
+			
+			if(sideOne == sideTwo && sideTwo == sideThree && sideThree == sideOne) {
+				return true;
+			}else {
+				return false;
+			}
 		}
 
 		public boolean isIsosceles() {
 			// TODO Write an implementation for this method declaration
-			return false;
+			
+			if(sideOne == sideTwo || sideTwo == sideThree || sideThree == sideOne) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		public boolean isScalene() {
 			// TODO Write an implementation for this method declaration
+			if(sideOne != sideTwo && sideTwo != sideThree && sideThree != sideOne) {
+				return true;
+			}else {
 			return false;
+			}
 		}
 
 	}
@@ -117,7 +143,55 @@ public class EvaluationService {
 	 */
 	public int getScrabbleScore(String string) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+		int score =0;
+		String string2 = string.toLowerCase();
+		for (int i = 0; i <= string2.length() -1; i++) {
+			char chr2 = string2.charAt(i);
+			switch (chr2) {
+			case 'a': 
+			case 'e':
+			case 'i':
+			case 'o':
+			case 'u':
+			case 'l':
+			case 'n':
+			case 'r':
+			case 's':
+			case 't':
+				score += 1;
+				break;
+			case 'd':
+			case 'g':
+				score += 2;
+				break;
+			case 'b':
+			case 'c':
+			case 'm':
+			case 'p':
+				score +=3;
+				break;
+			case 'f':
+			case 'h':
+			case 'v':
+			case 'w':
+			case 'y':
+				score +=4;
+				break;
+			case 'k':
+				score +=5;
+				break;
+			case 'j':
+			case 'x':
+				score += 8;
+				break;
+			case 'q':
+			case 'z':
+				score += 10;
+				break;	
+			}
+
+		}
+		return score;
 	}
 
 	/**
@@ -151,9 +225,18 @@ public class EvaluationService {
 	 * Note: As this exercise only deals with telephone numbers used in
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
-	public String cleanPhoneNumber(String string) {
+	
+	//62
+	public String cleanPhoneNumber(String string) throws IllegalArgumentException{
 		// TODO Write an implementation for this method declaration
-		return null;
+		
+		String clean = string.replaceAll("[^0-9]", "");
+		if(clean.length()>11) {
+			throw new IllegalArgumentException();
+		} else if (clean.length() < 10) {
+			throw new IllegalArgumentException();
+		}
+		return clean;
 	}
 
 	/**
@@ -247,6 +330,31 @@ public class EvaluationService {
 	 */
 	public String toPigLatin(String string) {
 		// TODO Write an implementation for this method declaration
+		
+		boolean isVowel;
+		int x = 0;
+		char[] vwlChr = {'a', 'e', 'i', 'o', 'u'};
+		char[] strChr = string.toCharArray();
+		String output = "";
+		for (int i = 0; i <= string.length(); i++) {
+			
+			output += strChr[i];
+			
+			for(int k = 0; i<=vwlChr.length; i++) {
+				
+				if(strChr[i]==vwlChr[k] & ) {	
+					x = true;
+					isVowel = true;
+					break;
+				}
+				
+			}
+		}
+		
+		string = 
+		
+		
+		
 		return null;
 	}
 
