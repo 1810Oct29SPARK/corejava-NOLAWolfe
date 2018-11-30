@@ -1,8 +1,8 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class EvaluationService {
 
@@ -15,7 +15,7 @@ public class EvaluationService {
 	 */
 	public String reverse(String string) {
 		char[] reversed = new char[string.length()];
-		for (int i = reversed.length - 1, j=0; i >= 0; i--, j++) {
+		for (int i = reversed.length - 1, j = 0; i >= 0; i--, j++) {
 			reversed[j] = string.charAt(i);
 		}
 		return new String(reversed);
@@ -34,13 +34,12 @@ public class EvaluationService {
 		phrase = phrase.toUpperCase();
 		String[] words = phrase.split("-|\\s");
 		String acr = "";
-		
-		
+
 		for (String w : words) {
-			
+
 			acr = acr + w.charAt(0);
 		}
-		
+
 		return acr;
 	}
 
@@ -53,8 +52,8 @@ public class EvaluationService {
 	 * different lengths.
 	 *
 	 */
-	
-	//@75 GOOD
+
+	// @75 GOOD
 	static class Triangle {
 		private double sideOne;
 		private double sideTwo;
@@ -97,18 +96,18 @@ public class EvaluationService {
 
 		public boolean isEquilateral() {
 			// TODO Write an implementation for this method declaration
-			
-			if(sideOne == sideTwo && sideTwo == sideThree && sideThree == sideOne) {
+
+			if (sideOne == sideTwo && sideTwo == sideThree && sideThree == sideOne) {
 				return true;
-			}else {
+			} else {
 				return false;
 			}
 		}
 
 		public boolean isIsosceles() {
 			// TODO Write an implementation for this method declaration
-			
-			if(sideOne == sideTwo || sideTwo == sideThree || sideThree == sideOne) {
+
+			if (sideOne == sideTwo || sideTwo == sideThree || sideThree == sideOne) {
 				return true;
 			} else {
 				return false;
@@ -117,10 +116,10 @@ public class EvaluationService {
 
 		public boolean isScalene() {
 			// TODO Write an implementation for this method declaration
-			if(sideOne != sideTwo && sideTwo != sideThree && sideThree != sideOne) {
+			if (sideOne != sideTwo && sideTwo != sideThree && sideThree != sideOne) {
 				return true;
-			}else {
-			return false;
+			} else {
+				return false;
 			}
 		}
 
@@ -143,12 +142,12 @@ public class EvaluationService {
 	 */
 	public int getScrabbleScore(String string) {
 		// TODO Write an implementation for this method declaration
-		int score =0;
+		int score = 0;
 		String string2 = string.toLowerCase();
-		for (int i = 0; i <= string2.length() -1; i++) {
+		for (int i = 0; i <= string2.length() - 1; i++) {
 			char chr2 = string2.charAt(i);
 			switch (chr2) {
-			case 'a': 
+			case 'a':
 			case 'e':
 			case 'i':
 			case 'o':
@@ -168,17 +167,17 @@ public class EvaluationService {
 			case 'c':
 			case 'm':
 			case 'p':
-				score +=3;
+				score += 3;
 				break;
 			case 'f':
 			case 'h':
 			case 'v':
 			case 'w':
 			case 'y':
-				score +=4;
+				score += 4;
 				break;
 			case 'k':
-				score +=5;
+				score += 5;
 				break;
 			case 'j':
 			case 'x':
@@ -187,7 +186,7 @@ public class EvaluationService {
 			case 'q':
 			case 'z':
 				score += 10;
-				break;	
+				break;
 			}
 
 		}
@@ -225,13 +224,13 @@ public class EvaluationService {
 	 * Note: As this exercise only deals with telephone numbers used in
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
-	
-	//62
-	public String cleanPhoneNumber(String string) throws IllegalArgumentException{
+
+	// 62
+	public String cleanPhoneNumber(String string) throws IllegalArgumentException {
 		// TODO Write an implementation for this method declaration
-		
+
 		String clean = string.replaceAll("[^0-9]", "");
-		if(clean.length()>11) {
+		if (clean.length() > 11) {
 			throw new IllegalArgumentException();
 		} else if (clean.length() < 10) {
 			throw new IllegalArgumentException();
@@ -249,8 +248,21 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+
+		TreeMap<String, Integer> tmap = new TreeMap<String, Integer>();
+
+		String[] words = string.split("[^a-z]");
+		for (int i = 0; i < words.length; i++) {
+			Integer c = tmap.get(words[i]);
+			if (tmap.get(words[i]) == null)
+				tmap.put(words[i], 1);
+			else
+				tmap.put(words[i], ++c);
+		}
+
+		tmap.remove("");
+
+		return tmap;
 	}
 
 	/**
@@ -328,34 +340,42 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
+	
+	// 57 + Binary Search
 	public String toPigLatin(String string) {
 		// TODO Write an implementation for this method declaration
-		
-		boolean isVowel;
-		int x = 0;
-		char[] vwlChr = {'a', 'e', 'i', 'o', 'u'};
-		char[] strChr = string.toCharArray();
-		String output = "";
-		for (int i = 0; i <= string.length(); i++) {
-			
-			output += strChr[i];
-			
-			for(int k = 0; i<=vwlChr.length; i++) {
-				
-				if(strChr[i]==vwlChr[k] & ) {	
-					x = true;
-					isVowel = true;
-					break;
+
+		int alpha = 0;
+		String start = "";
+		String end = "";
+		int vwlPoint = 0;
+
+		char[] vowels = { 'a', 'e', 'i', 'o', 'u' };
+		String[] words = string.split("[^a-z]");
+
+		for (int i = 0; i < words.length; i++) {
+			char[] word = new char[words[i].length()];
+			for (int j = 0; j < words[i].length(); j++) {
+//				System.out.println(words[i].charAt(j));
+				for (int k = 0; k < vowels.length; k++) {
+					if (words[i].charAt(j) == vowels[k]) {
+						int omega = words[i].length();
+						vwlPoint = i;
+						if (alpha != vwlPoint) {
+							start = words[j].substring(vwlPoint, omega);
+							end = words[j].substring(0, vwlPoint)+"ay";
+							
+							
+						}
+						break;
+					}
 				}
-				
 			}
 		}
 		
-		string = 
+		String pl = start + end;
 		
-		
-		
-		return null;
+		return pl;
 	}
 
 	/**
