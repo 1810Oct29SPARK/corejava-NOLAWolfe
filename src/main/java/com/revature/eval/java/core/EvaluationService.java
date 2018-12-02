@@ -1,8 +1,18 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 public class EvaluationService {
 
@@ -247,6 +257,8 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
+
+	// ALL FIVE DONE
 	public Map<String, Integer> wordCount(String string) {
 
 		TreeMap<String, Integer> tmap = new TreeMap<String, Integer>();
@@ -300,13 +312,18 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T> {
-		private List<T> sortedList;
+
+	// @49
+	static class BinarySearch<T extends Comparable<T>> {
 
 		public int indexOf(T t) {
 			// TODO Write an implementation for this method declaration
-			return 0;
+			int search = Collections.binarySearch(sortedList, t);
+
+			return search;
 		}
+
+		private List<T> sortedList;
 
 		public BinarySearch(List<T> sortedList) {
 			super();
@@ -340,42 +357,45 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
-	
+
 	// 57 + Binary Search
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-
 		int alpha = 0;
 		String start = "";
 		String end = "";
+		String pLatinFull = "";
 		int vwlPoint = 0;
+		int counter1 = 0;
 
 		char[] vowels = { 'a', 'e', 'i', 'o', 'u' };
 		String[] words = string.split("[^a-z]");
+		String[] pLatin = new String[words.length];
 
 		for (int i = 0; i < words.length; i++) {
-			char[] word = new char[words[i].length()];
 			for (int j = 0; j < words[i].length(); j++) {
-//				System.out.println(words[i].charAt(j));
 				for (int k = 0; k < vowels.length; k++) {
+
 					if (words[i].charAt(j) == vowels[k]) {
 						int omega = words[i].length();
-						vwlPoint = i;
-						if (alpha != vwlPoint) {
-							start = words[j].substring(vwlPoint, omega);
-							end = words[j].substring(0, vwlPoint)+"ay";
-							
-							
+						vwlPoint = j;
+
+						if (alpha != vwlPoint || alpha == vwlPoint) {
+							start = words[i].substring(vwlPoint, omega);
+							end = words[i].substring(alpha, vwlPoint) + "ay";
+							pLatin[i] = start + end;
+							counter1++;
 						}
-						break;
 					}
 				}
+				if (counter1 == 1) {
+					break;
+				}
 			}
+
+			pLatinFull = pLatinFull + "" + pLatin[i];
 		}
-		
-		String pl = start + end;
-		
-		return pl;
+		return pLatinFull;
+
 	}
 
 	/**
@@ -393,9 +413,31 @@ public class EvaluationService {
 	 * @param input
 	 * @return
 	 */
+	// @46
 	public boolean isArmstrongNumber(int input) {
 		// TODO Write an implementation for this method declaration
-		return false;
+
+		int numLen = Integer.toString(input).length();
+		int tempInt = input;
+		int[] numArr = new int[numLen];
+		for (int i = 0; i < numLen; i++) {
+			numArr[i] = tempInt % 10;
+			tempInt /= 10;
+		}
+
+		int cnt = 0;
+		int[] temp = new int[numArr.length];
+		for (int j = 0; j < numArr.length; j++) {
+			temp[j] = (int) ((double) Math.pow(numArr[j], numArr.length));
+			cnt += temp[j];
+
+		}
+		if (cnt == input) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 	/**
@@ -410,7 +452,23 @@ public class EvaluationService {
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
 		// TODO Write an implementation for this method declaration
-		return null;
+
+		List<Long> lst = new ArrayList<Long>();
+
+		for (long i = 2; i <= l; i++) {
+
+			if (l % i == 0) {
+
+				while (l % i == 0) {
+
+					lst.add(i);
+					l /= i;
+
+				}
+			}
+
+		}
+		return lst;
 	}
 
 	/**
@@ -592,8 +650,25 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+
+		HashSet<Integer> hshSet = new HashSet<Integer>();
+
+		int temp = 0;
+		int x = set.length;
+		for (int j = set[0]; j < i; j++) {
+			for (int k = 0; k < set.length; k++) {
+				if (j % set[k] == 0) {
+
+					hshSet.add(j);
+
+				}
+			}
+		}
+		for (int t : hshSet) {
+			temp += t;
+		}
+		System.out.println(temp); 
+		return temp;
 	}
 
 	/**
@@ -634,7 +709,60 @@ public class EvaluationService {
 	 */
 	public boolean isLuhnValid(String string) {
 		// TODO Write an implementation for this method declaration
+
+		int i = 0;
+		String[] test1 = string.split("[^0-9|^\\s]");
+		if (test1.length > 1) {
+			// scrub invalid values
+			// System.out.println("false");
+			return false;
+		} else {
+
+			// remove spaces from valid values
+			String str = string.replace(" ", "");
+//			System.out.println(str);
+
+			char[] chrr = str.toCharArray();
+			int[] arr = new int[chrr.length];
+			int counter = 0;
+			int total = 0;
+
+			// get Int Aray of Values
+
+			for (i = 0; i < chrr.length; i++) {
+				arr[i] = Character.getNumericValue(chrr[i]);
+			}
+
+			// even array index values for double = odd
+			for (int j = arr.length - 1; j >= 0; j--) {
+				counter++;
+				if (counter % 2 == 0) {
+					// System.out.println("1 raw : " + arr[j]);
+					arr[j] *= 2;
+					// System.out.println("2 (*2): " + arr[j]);
+					if (arr[j] > 9) {
+
+						arr[j] -= 9;
+						// System.out.println("3 (> 9 -9): " + arr[j]);
+						total += arr[j];
+					} else {
+						// System.out.println("4 (!> 9): " + arr[j]);
+						total += arr[j];
+					}
+				} else {
+					// System.out.println("5 OddIndx: " + arr[j]);
+					total += arr[j];
+				}
+				// System.out.println(total);
+			}
+			// System.out.println();
+			if (total % 10 == 0) {
+				return true;
+			}
+
+		}
 		return false;
+
 	}
 
 	/**
@@ -664,9 +792,67 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
+
+	// @36
 	public int solveWordProblem(String string) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+
+		Map<Integer, String> map = new HashMap<Integer, String>();
+		String strLC = string.toLowerCase();
+		String[] str = strLC.split("[\\s|?]");
+		Integer i = 0;
+		for (i = 0; i < str.length; i++) {
+
+			map.put(i, str[i]);
+
+		}
+		map.remove(0);
+		map.remove(1);
+
+		if (map.size() == 4) {
+			map.remove(4);
+			String new4 = (String) map.put(4, map.get(5));
+		}
+
+		if (map.get(3).contains("minus")) {
+			map.replace(3, "-");
+		}
+		if (map.get(3).contains("plus")) {
+			map.replace(3, "+");
+		}
+		if (map.get(3).contains("multiplied")) {
+			map.replace(3, "*");
+		}
+		if (map.get(3).contains("divided")) {
+			map.replace(3, "/");
+		}
+
+		Set<Map.Entry<Integer, String>> st = map.entrySet();
+
+		for (Map.Entry<Integer, String> me : st) {
+
+		}
+
+		String op = map.get(3);
+		int num1 = (Integer.parseInt(map.get(2)));
+		int num2 = (Integer.parseInt(map.get(4)));
+
+		int total = 0;
+
+		switch (op) {
+
+		case "+":
+			return total = num1 + num2;
+
+		case "-":
+			return total = num1 - num2;
+		case "*":
+			return total = num1 * num2;
+		case "/":
+			return total = num1 / num2;
+		}
+		System.out.println(total);
+		return total;
 	}
 
 }
