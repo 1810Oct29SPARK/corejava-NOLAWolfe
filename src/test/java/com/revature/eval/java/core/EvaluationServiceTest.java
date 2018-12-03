@@ -530,7 +530,7 @@ public class EvaluationServiceTest {
 	public void invalidIsbnCheckDigit() {
 		assertFalse(evaluationService.isValidIsbn("3-598-21508-9"));
 	}
-
+	//issue for whatever reason. finds X , adds 10, still not valid
 	@Test
 	public void validIsbnNumberWithCheckDigitOfTen() {
 		assertTrue(evaluationService.isValidIsbn("3-598-21507-X"));

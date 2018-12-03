@@ -1,5 +1,8 @@
 package com.revature.eval.java.core;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,10 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 
 public class EvaluationService {
 
@@ -359,44 +358,105 @@ public class EvaluationService {
 	 */
 
 	// 57 + Binary Search
+
 	public String toPigLatin(String string) {
-		int alpha = 0;
-		String start = "";
-		String end = "";
-		String pLatinFull = "";
-		int vwlPoint = 0;
-		int counter1 = 0;
 
-		char[] vowels = { 'a', 'e', 'i', 'o', 'u' };
-		String[] words = string.split("[^a-z]");
-		String[] pLatin = new String[words.length];
+		String[] str = string.split(" ");
+		String temp = "";
+		String start;
+		String end;
+		int aplha = 0;
+		char[] chrArr = { 'a', 'e', 'i', 'o', 'u' };
+		String[] pLatin = new String[str.length];
+		int counter = 0;
+		int counter2 = 0;
 
-		for (int i = 0; i < words.length; i++) {
-			for (int j = 0; j < words[i].length(); j++) {
-				for (int k = 0; k < vowels.length; k++) {
+		for (int i = 0; i < str.length; i++) {
 
-					if (words[i].charAt(j) == vowels[k]) {
-						int omega = words[i].length();
-						vwlPoint = j;
-
-						if (alpha != vwlPoint || alpha == vwlPoint) {
-							start = words[i].substring(vwlPoint, omega);
-							end = words[i].substring(alpha, vwlPoint) + "ay";
+			for (int j = 0; j < str[i].length(); j++) {
+				for (int k = 0; k < chrArr.length; k++) {
+					if (str[i].charAt(j) == chrArr[k]) {
+						counter++;
+						if (j == 0 && counter == 1) {
+							start = str[i].substring(j, str[i].length());
+							end = str[i].substring(0, j) + "ay";
 							pLatin[i] = start + end;
-							counter1++;
+//							System.out.println("==0: " + pLatin[i]);
+							break;
+						} else if (j > 0 && counter == 1 || i >= 1) {
+
+							if (str[i].charAt(j) == 'u' && str[i].charAt(j - 1) == 'q') {
+								start = str[i].substring(j + 1, str[i].length());
+								end = str[i].substring(0, j + 1) + "ay";
+								pLatin[i] = start + end;
+//								System.out.println(pLatin[i]);
+								break;
+							}
+
+							start = str[i].substring(j, str[i].length());
+							end = str[i].substring(0, j) + "ay";
+							pLatin[i] = start + end;
+//							System.out.println("j>0: " + pLatin[i]);
+
+							break;
+
 						}
 					}
-				}
-				if (counter1 == 1) {
-					break;
+
 				}
 			}
 
-			pLatinFull = pLatinFull + "" + pLatin[i];
+			temp += pLatin[i];
+			if (str.length > 0) {
+				temp += " ";
+			}
 		}
-		return pLatinFull;
+		temp = temp.trim();
+		return temp;
 
 	}
+
+	// public String toPigLatin(String string) {
+//		int alpha = 0;
+//		String start = "";
+//		String end = "";
+//		String pLatinFull = "";
+//		int vwlPoint = 0;
+//		int counter1 = 0;
+//
+//		char[] vowels = { 'a', 'e', 'i', 'o', 'u' };
+//		String[] words = string.split("[^a-z]");
+//		String[] pLatin = new String[words.length];
+//
+//		for (int i = 0; i < words.length; i++) {
+//			for (int j = 0; j < words[i].length(); j++) {
+//				for (int k = 0; k < vowels.length; k++) {
+//
+//					if (words[i].charAt(j) == vowels[k]) {
+//						int omega = words[i].length();
+//						vwlPoint = j;
+//
+//						if (alpha != vwlPoint || alpha == vwlPoint) {
+//							start = words[i].substring(vwlPoint, omega);
+//							end = words[i].substring(alpha, vwlPoint) + "ay";
+//							pLatin[i] = start + end;
+//							counter1++;
+//							break;
+//						}
+//					}
+//					if (counter1 == 1) {
+//						break;
+//					}
+//				}
+//				
+//			}
+//
+//			pLatinFull = pLatinFull + "" + pLatin[i];
+//		}
+//		System.out.println(pLatinFull);
+//		return pLatinFull;
+//
+//	}
 
 	/**
 	 * 9. An Armstrong number is a number that is the sum of its own digits each
@@ -507,7 +567,63 @@ public class EvaluationService {
 
 		public String rotate(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+
+			char[] chr = string.toCharArray();
+			char[] chrB = new char[26];
+			char[] chrF = new char[26];
+			char[] chrCL = new char[26];
+			char[] chrCL1 = new char[26];
+			char c;
+			int counter = 0;
+			String temp = "";
+
+			counter = 0;
+			// System.out.println();
+			for (c = 'a'; c <= 'z'; c++) {
+				chrF[counter] = c;
+				chrB[counter] = c;
+				// System.out.print(chrF[counter]);
+				counter++;
+			}
+			counter = 0;
+			for (c = 'A'; c <= 'Z'; c++) {
+				chrCL[counter] = c;
+				chrCL1[counter] = c;
+				// System.out.print(chrF[counter]);
+				counter++;
+			}
+
+			int rot = 0;
+			for (int i = 0; i < 26; i++) {
+
+				if (i + key > 25) {
+					rot = (i + key) - 26;
+				} else {
+					rot = (i + key);
+				}
+				chrB[i] = chrF[rot];
+				chrCL1[i] = chrCL[rot];
+//				System.out.println("1: " + chrB[i]);
+//				System.out.println("2: " + chrF[i]);
+			}
+
+			// System.out.println();
+			counter = 0;
+			int j = 0;
+			for (int i = 0; i < chr.length; i++) {
+				counter++;
+				for (j = 0; j < 26; j++) {
+					if (chr[i] == chrF[j]) {
+						chr[i] = chrB[j];
+						break;
+					} else if (chr[i] == chrCL[j]) {
+						chr[i] = chrCL1[j];
+						break;
+					}
+				}
+				temp += chr[i];
+			}
+			return temp;
 		}
 
 	}
@@ -524,9 +640,34 @@ public class EvaluationService {
 	 * @param i
 	 * @return
 	 */
-	public int calculateNthPrime(int i) {
+	public int calculateNthPrime(int i) throws IllegalArgumentException {
 		// TODO Write an implementation for this method declaration
-		return 0;
+
+		int prime = 2;
+		int counter = 1;
+
+		if (i <= 0) {
+			throw new IllegalArgumentException("");
+		} else if (i == 1) {
+			return prime;
+		}
+		for (int j = 3; j < Integer.MAX_VALUE; j++) {
+			if (counter == i) {
+				break;
+			}
+			for (int k = 2; k <= j; k++) {
+				if (j % k == 0 && j != k) {
+					break;
+				}
+				if (j == k) {
+					counter++;
+					prime = j;
+					break;
+				}
+			}
+		}
+
+		return prime;
 	}
 
 	/**
@@ -563,7 +704,50 @@ public class EvaluationService {
 		 */
 		public static String encode(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+
+			String str = string.toLowerCase();
+			str = str.replaceAll("[^0-9a-z]", "");
+			char[] chr = str.toCharArray();
+			char[] chrB = new char[26];
+			char[] chrF = new char[26];
+			char c;
+			int counter = 0;
+			String temp = "";
+
+			for (c = 'z'; c >= 'a'; c--) {
+				chrB[counter] = c;
+				// System.out.print(chrB[counter]);
+				counter++;
+			}
+			counter = 0;
+			// System.out.println();
+			for (c = 'a'; c <= 'z'; c++) {
+				chrF[counter] = c;
+				// System.out.print(chrF[counter]);
+				counter++;
+
+			}
+			// System.out.println();
+			counter = 0;
+			int j = 0;
+			for (int i = 0; i < chr.length; i++) {
+				counter++;
+				for (j = 0; j < 26; j++) {
+					if (chr[i] == chrF[j]) {
+						chr[i] = chrB[j];
+						temp += chr[i];
+						break;
+					} else if (chr[i] > '0' && chr[i] < '9') {
+						temp += chr[i];
+						break;
+					}
+				}
+				if (counter % 5 == 0 && i != 0 && counter < chr.length) {
+					temp += " ";
+				}
+			}
+
+			return temp;
 		}
 
 		/**
@@ -574,8 +758,47 @@ public class EvaluationService {
 		 */
 		public static String decode(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			String str = string.toLowerCase();
+			str = str.replaceAll(" ", "");
+			char[] chr = str.toCharArray();
+			char[] chrB = new char[26];
+			char[] chrF = new char[26];
+			char c;
+			int counter = 0;
+			String temp = "";
+
+			for (c = 'z'; c >= 'a'; c--) {
+				chrB[counter] = c;
+				// System.out.print(chrB[counter]);
+				counter++;
+			}
+			counter = 0;
+			// System.out.println();
+			for (c = 'a'; c <= 'z'; c++) {
+				chrF[counter] = c;
+				// System.out.print(chrF[counter]);
+				counter++;
+
+			}
+			counter = 0;
+			int j = 0;
+			for (int i = 0; i < chr.length; i++) {
+				counter++;
+				for (j = 0; j < 26; j++) {
+					if (chr[i] == chrB[j]) {
+						chr[i] = chrF[j];
+						temp += chr[i];
+						break;
+					} else if (chr[i] > '0' && chr[i] < '9') {
+						temp += chr[i];
+						break;
+					}
+				}
+			}
+			// System.out.println(temp);
+			return temp;
 		}
+
 	}
 
 	/**
@@ -600,8 +823,33 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
+
 	public boolean isValidIsbn(String string) {
 		// TODO Write an implementation for this method declaration
+
+		String str = string.replaceAll("[^0-9X]", "");
+		char[] chr = str.toCharArray();
+		int counter = 10;
+		int temp = 0;
+		if (chr.length < 10) {
+			return false;
+		} else {
+			for (char x : chr) {
+				
+				if (counter == 1 && x == 'X') {
+					temp += 10;
+				} else if (counter == 1) {
+					temp += counter * x;
+				} else {
+					temp += counter * x;
+				}
+				counter--;
+				
+			}
+			if (temp % 11 == 0) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -620,7 +868,27 @@ public class EvaluationService {
 	 */
 	public boolean isPangram(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+
+		HashSet<Character> hshSet = new HashSet<Character>();
+		HashSet<Character> hshSetComp = new HashSet<Character>();
+		String str = string.replace(" ", "");
+		char[] chrArr = str.toCharArray();
+
+		if (string == "") {
+			return false;
+		} else {
+
+			Character c;
+			for (c = 'a'; c < 'z'; c++) {
+				hshSetComp.add(c);
+			}
+			for (char t : chrArr) {
+				hshSet.add(t);
+			}
+
+		}
+
+		return hshSet.containsAll(hshSetComp);
 	}
 
 	/**
@@ -633,7 +901,16 @@ public class EvaluationService {
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
 		// TODO Write an implementation for this method declaration
-		return null;
+
+		long gigasecond = 1000000000;
+
+		if (!given.isSupported(ChronoUnit.SECONDS)) {
+			LocalDate newDate = (LocalDate) given;
+			LocalDateTime newDate2 = newDate.atStartOfDay();
+			return newDate2.plus(gigasecond, ChronoUnit.SECONDS);
+		}
+
+		return given.plus(gigasecond, ChronoUnit.SECONDS);
 	}
 
 	/**
@@ -667,7 +944,7 @@ public class EvaluationService {
 		for (int t : hshSet) {
 			temp += t;
 		}
-		System.out.println(temp); 
+		// System.out.println(temp);
 		return temp;
 	}
 
@@ -828,10 +1105,6 @@ public class EvaluationService {
 		}
 
 		Set<Map.Entry<Integer, String>> st = map.entrySet();
-
-		for (Map.Entry<Integer, String> me : st) {
-
-		}
 
 		String op = map.get(3);
 		int num1 = (Integer.parseInt(map.get(2)));
